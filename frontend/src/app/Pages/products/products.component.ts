@@ -8,17 +8,20 @@ import { CarouselComponent } from '../../Components/carousel/carousel.component'
 import { UpdateProductFormComponent } from '../../Components/update-product-form/update-product-form.component';
 import { ProductService } from '../../Services/product.service';
 import { CartService } from '../../Services/cart.service';
+import { DeleateModelComponent } from '../../Components/deleate-model/deleate-model.component';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [NavBarComponent, RouterLink, TextTransformPipe, FooterComponent, CarouselComponent, UpdateProductFormComponent],
+  imports: [NavBarComponent, RouterLink, TextTransformPipe, FooterComponent, CarouselComponent, UpdateProductFormComponent, DeleateModelComponent],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css'
 })
 export class ProductsComponent {
 
   isAdmin: any
+  deleteProduct: any
+
   // products: any = poducList
 
   products: any
@@ -49,5 +52,8 @@ export class ProductsComponent {
     this.cartService.addCartItem(productId, 1)
   }
 
+  handleDeleteBtn(product: any) {
+    this.deleteProduct = product;
+  }
 
 }

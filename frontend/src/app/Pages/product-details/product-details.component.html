@@ -62,7 +62,14 @@
         >
           Update
         </button>
-        <button class="btn btn-danger mt-3 col-md-5">Delete</button>
+        <button
+          class="btn btn-danger mt-3 col-md-5"
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdropDelete"
+          (click)="handleDeleteBtn(product)"
+        >
+          Delete
+        </button>
       </div>
 
       }@else {
@@ -144,6 +151,8 @@
   </div>
 </div>
 
-<app-update-product-form [product]="updatProduct"></app-update-product-form>
 -->
+<app-update-product-form [product]="updatProduct"></app-update-product-form>
+<app-deleate-model [product]="deleteProduct"></app-deleate-model>
+
 <app-footer></app-footer>

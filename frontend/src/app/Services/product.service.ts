@@ -51,8 +51,15 @@ export class ProductService {
     const headers = new HttpHeaders({
       'Authorization': `Token ${localStorage.getItem('user_token')}`,
     });
+    const deleted = this.http.delete(`http://localhost:8000/products/${id}`, { headers });
+    deleted.subscribe(
+      data => {
+        console.log(data)
+        this.getProducts()
+      },
+      error => { console.log('error: ', error) })
 
-    return this.http.delete(`http://localhost:8000/products/${id}`, { headers });
+    return deleted
 
   }
 
