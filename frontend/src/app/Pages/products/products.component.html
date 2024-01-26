@@ -1,0 +1,80 @@
+<app-nav-bar></app-nav-bar>
+<app-carousel></app-carousel>
+
+<div class="container mt-5 row w-100 justify-content-center m-auto mb-5">
+  <!-- Product Section Header -->
+  <div class="mb-4 w-100 text-center mt-5">
+    <h2 class="text-primary">Best Seller Products</h2>
+    <p>Explore our latest and greatest products.</p>
+  </div>
+  @for (product of products; track $index) {
+
+  <div class="card col-md-3 me-3 mt-3 p-0" style="width: 18rem">
+    <a [routerLink]="['product-details', product._id]">
+      <img
+        [src]="product.images[0] || defaultImageUrl"
+        class="card-img-top w-100"
+        alt="Product Image"
+        style="height: 300px"
+      />
+    </a>
+    <div class="card-body">
+      <h5 class="card-title">{{ product.title }}</h5>
+      <p
+        class="card-text cursor"
+        [routerLink]="['product-details', product._id]"
+      >
+        {{ product.description | textTransform }}
+      </p>
+      <div class="rating">
+        <!-- You can use Font Awesome stars for the rating -->
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="far fa-star"></i>
+
+        <span class="original-price ms-3">{{ product.category.title }}</span>
+      </div>
+      <p class="card-price">
+        price: <span class="original-price me-3">{{ product.price }}$</span>
+
+        dicount:
+        <span class="sale-price">{{ product.dicount }}%</span>
+      </p>
+      @if (isAdmin == true || isAdmin== "true") {
+      <button
+        class="btn btn-primary me-2"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+        (click)="handleUpdateBtn(product)"
+      >
+        Update
+      </button>
+      <button class="btn btn-danger">Delete</button>
+      }@else {
+
+      <button class="btn btn-primary" (click)="handleAddToCart(product._id)">
+        Add to Cart
+      </button>
+      }
+      <!-- On Sale badge -->
+
+      @if (product.stock >1) {
+
+      <span class="badge badge-sucess ms-2">On Sale</span>
+      }@else {
+
+      <span class="badge badge-danger">not available</span>
+
+      }
+    </div>
+  </div>
+
+  }
+</div>
+
+<!-- Modal -->
+<app-update-product-form [product]="updatProduct"></app-update-product-form>
+
+<app-footer></app-footer>

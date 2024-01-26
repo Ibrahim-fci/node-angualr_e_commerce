@@ -1,0 +1,53 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="container" style="margin-top: 6em; min-height: 80vh">
+  <h2 class="text-primary">Orders Page</h2>
+
+  @for (order of orders; track $index) {
+
+  <table class="table">
+    @if ($index == 0) {
+    <thead>
+      <th>#{{ $index }}</th>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+
+    }@else {
+    <thead>
+      <th>#{{ $index }}</th>
+    </thead>
+    }
+    <tbody>
+      <!-- Sample data, you would dynamically generate this from your backend -->
+      @for (product of order.products; track $index) {
+
+      <tr>
+        <td class="w-50">{{ product.product.title }}</td>
+        <td class="w-25">{{ product.quantity }}</td>
+        <td class="w-25">${{ product.product.price }}</td>
+      </tr>
+      }
+
+      <tr>
+        status: @if (order.status == "Pending") {
+        <span class="badge badge-warning text-bg-warning">{{
+          order.status
+        }}</span>
+        }@else {
+        <span class="badge badge-warning text-bg-success">{{
+          order.status
+        }}</span>
+        }
+      </tr>
+      <!-- Add more rows as needed -->
+    </tbody>
+  </table>
+
+  }
+</div>
+
+<app-footer></app-footer>

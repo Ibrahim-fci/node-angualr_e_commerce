@@ -1,0 +1,223 @@
+<!-- Navigation Bar -->
+<app-nav-bar></app-nav-bar>>
+
+<div class="container mt-4">
+  <!-- Cart Items -->
+  <div class="row mt-5 mb-5">
+    <div class="col-md-8">
+      <div class="mb-4 w-100 mt-1">
+        <h2 class="text-primary">Your Shopping Cart</h2>
+      </div>
+
+      <!-- Product Cards in Cart -->
+      @for (item of cart; track $index) {
+      <div class="card mb-3">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img
+              [src]="item?.product.images[0] || defaultImageUrl"
+              class="card-img"
+              alt="Product Image"
+              style="height: 160px"
+            />
+
+            <div class="form-group">
+              <button
+                class="btn btn-danger mt-2 mb-2 w-100"
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdropDeleteCart"
+                (click)="handelDeleteCartItemModal(item)"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.product.title }}</h5>
+              <p class="card-text">
+                {{ item.product.description | textTransform }}
+              </p>
+              <p class="card-text">
+                <strong>${{ item.product.price }}</strong>
+              </p>
+              <!-- Quantity Input Field -->
+              <div class="form-group">
+                <label for="quantity">Quantity: {{ item.quantity }}</label>
+                <input
+                  type="number"
+                  id="quantity"
+                  value="1"
+                  class="form-control text-center"
+                  [value]="item.quantity"
+                  (change)="handelUpdateQuantity($event, item._id)"
+                  min="1"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- Repeat the above card structure for each product in the cart -->
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="col-md-4 mt-5">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Cart Summary</h5>
+          <ul class="list-group list-group-flush">
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              Subtotal:
+              <span class="badge-primary">${{ totalPrice }}</span>
+              <span class="badge badge-primary badge-pill">$19.99</span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              Shipping: <span class="">$5.00</span>
+
+              <span class="badge badge-primary badge-pill">$5.00</span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              Total:<span class="">$ {{ totalPrice + 5 }}</span>
+              <span class="badge badge-primary badge-pill"
+                >$ {{ totalPrice + 5 }}</span
+              >
+            </li>
+          </ul>
+          @if (cart.length) {
+
+          <button
+            type="button"
+            class="btn btn-success btn-block mt-3"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+          >
+            Checkout
+          </button>
+          }@else {
+          <button type="button" class="btn btn-success btn-block mt-3" disabled>
+            Checkout
+          </button>
+
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="staticBackdropDeleteCart"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+          Delete Cart Item
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Are You Shure You Want To Delete
+        <span class="text-danger">{{ deleteItem?.product.title }} </span> Item
+        From Your Cart
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="handelDeleteCartItem()"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+          Order Confirmation
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row m-auto">
+          @for (item of cart; track $index) {
+
+          <div class="col-md-6">
+            <img
+              [src]="item.product.images[0]"
+              class="card-img"
+              alt="Product Image"
+              style="height: 120px"
+            />
+          </div>
+          <div class="col-md-6">
+            <h5>{{ item.product.title }}</h5>
+            <h5>Price: ${{ item.product.price }}</h5>
+            <h5>Quantity: {{ item.quantity }}</h5>
+            <h5>Total: ${{ item.product.price * item.quantity }}</h5>
+          </div>
+
+          <div
+            class="my-2"
+            style="width: 100%; height: 1.6px; background-color: #ddd"
+          ></div>
+          }
+
+          <div>totalPrice: ${{ totalPrice }}</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" class="btn btn-success" (click)="handelOrder()">
+          Order Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,193 @@
+<!-- Navigation Bar -->
+
+<app-nav-bar></app-nav-bar>
+<div class="container-fluid">
+  <div class="container-fluid">
+    <div class="row mt-5">
+      <!-- Sidebar -->
+      <div class="col-md-3 mt-3">
+        <!-- Search Bar -->
+        <div class="input-group mt-3 mb-3">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary me-1" type="button">
+              Search
+            </button>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search for products"
+            aria-label="Search"
+            aria-describedby="basic-addon2"
+            (input)="onSearchTitle($event)"
+          />
+        </div>
+
+        <!-- Filters -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Filters</h5>
+            <!-- Add your filter options -->
+            <form>
+              <div class="form-group">
+                <label for="categoryFilter">Category:</label>
+                <select
+                  class="form-control mb-2"
+                  id="categoryFilter"
+                  (change)="onCategoryChange($event)"
+                >
+                  @for (category of categories; track $index) {
+                  @if(category.title == "all") {
+
+                  <option [value]="category._id" selected>
+                    {{ category.title }}
+                  </option>
+                  } @else {
+                  <option [value]="category._id" selected>
+                    {{ category.title }}
+                  </option>
+                  } }
+                </select>
+              </div>
+              <!-- <div class="form-group">
+                <label for="priceRangeFilter">Price Range:</label>
+                <input
+                  type="range"
+                  class="form-control-range"
+                  id="priceRangeFilter"
+                />
+              </div> -->
+              <button type="submit" class="btn btn-primary mt-3">
+                Apply Filters
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-md-9 mt-5">
+        <!-- Product Section Header -->
+        <div class="mb-4 w-100 text-center">
+          <h2 class="text-primary">Featured Products</h2>
+          <p>Explore our latest and greatest products.</p>
+
+          @if(isAdmin == true || isAdmin=="true"){
+
+          <button
+            class="btn btn-success rounded-5 w-75"
+            style="z-index: 6"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdropAdd"
+          >
+            Add
+          </button>
+          }
+        </div>
+
+        <!-- Product Cards -->
+        <div class="row">
+          @for (product of products; track $index) {
+          <div class="col-md-6 col-lg-6 col-xl-4 mb-4">
+            <div class="card">
+              <a [routerLink]="['/product-details', product._id]">
+                <img
+                  [src]="product?.images[0] || defaultImageUrl"
+                  class="card-img-top"
+                  alt="Product Image"
+                  style="height: 300px"
+                />
+              </a>
+              <div class="card-body">
+                <h5 class="card-title">{{ product.title }}</h5>
+                <p
+                  class="card-text"
+                  [routerLink]="['/product-details', product._id]"
+                >
+                  {{ product.description | textTransform }}
+                </p>
+                <p class="card-text">{{ product.price }}$</p>
+                <div class="d-flex justify-content-between">
+                  <div class="rating">⭐⭐⭐⭐⭐</div>
+                  @if(isAdmin == true || isAdmin=="true"){
+                  <button
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"
+                    (click)="handleUpdateBtn(product)"
+                  >
+                    Update
+                  </button>
+                  <button
+                    class="btn btn-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdropDelete"
+                    (click)="handleDeleteBtn(product)"
+                  >
+                    Delete
+                  </button>
+
+                  }@else {
+
+                  <button
+                    class="btn btn-primary"
+                    (click)="handleAddToCart(product._id)"
+                  >
+                    Add to Cart
+                  </button>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+        <div class="container mt-5 mb-5 w-50 m-auto">
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  aria-label="Previous"
+                  (click)="handlepreviousPage()"
+                >
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+
+              @for (item of pages; track $index) {
+
+              <li
+                class="page-item pointer-event"
+                (click)="handlePagination(item)"
+              >
+                <a class="page-link pointer-event">{{ item }}</a>
+              </li>
+
+              }
+
+              <li class="page-item pointer-event">
+                <a
+                  class="page-link pointer-event"
+                  aria-label="Next"
+                  (click)="handleNextPage()"
+                >
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <app-add-model></app-add-model>
+  <app-update-product-form [product]="updatProduct"></app-update-product-form>
+  <app-deleate-model [product]="deleteProduct"></app-deleate-model>
+
+  <!-- Footer -->
+</div>
+
+<app-footer></app-footer>
