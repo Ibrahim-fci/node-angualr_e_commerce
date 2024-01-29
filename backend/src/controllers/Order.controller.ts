@@ -11,6 +11,7 @@ export default {
         let product_list = []
 
 
+
         //@desc get user cart
         const user = await User.findOne({ _id: auth_user._id }).populate("cart");
         if (!user) return res.status(404).json({ error: new ApiError("user not found", 404) })
@@ -67,9 +68,20 @@ export default {
     getAll: expressAsyncHandler(async (req: any, res: any) => {
 
         const user = req.user;
+        let orders = []
 
-        // @desc get user orders
-        const orders = await Order.find({ user: user._id }).populate("products.product")
+        if (user.isAdmin) {
+
+            // @desc get all orders
+            orders = await Order.find().populate("products.product")
+            return res.status(200).json({ orders })
+
+
+        } else {
+
+            // @desc get user orders
+            orders = await Order.find({ user: user._id }).populate("products.product")
+        }
 
         return res.status(200).json({ orders })
 

@@ -3,7 +3,7 @@ import { NavBarComponent } from '../../Components/nav-bar/nav-bar.component';
 import { FooterComponent } from '../../Components/footer/footer.component';
 import { UpdateProductFormComponent } from '../../Components/update-product-form/update-product-form.component';
 import { ProductService } from '../../Services/product.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TextTransformPipe } from '../../pipes/text-transform.pipe';
 import { DeleateModelComponent } from '../../Components/deleate-model/deleate-model.component';
 import { AddModelComponent } from '../../Components/add-model/add-model.component';
@@ -27,7 +27,7 @@ export class AllProductsComponent {
   data = this.productService.products
   categories: any
 
-  constructor(private productService: ProductService, private cartService: CartService) {
+  constructor(private productService: ProductService, private cartService: CartService, private router: Router) {
     this.isAdmin = localStorage.getItem("isAdmin")
 
   }
@@ -97,6 +97,10 @@ export class AllProductsComponent {
 
 
   handleAddToCart(productId: any) {
+
+    if (localStorage.getItem("user_token") == null) {
+      this.router.navigate(['/login']);
+    }
 
     this.cartService.addCartItem(productId, 1)
   }

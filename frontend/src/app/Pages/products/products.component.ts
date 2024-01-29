@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavBarComponent } from '../../Components/nav-bar/nav-bar.component';
 import { poducList } from '../../products-list';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TextTransformPipe } from '../../pipes/text-transform.pipe';
 import { FooterComponent } from '../../Components/footer/footer.component';
 import { CarouselComponent } from '../../Components/carousel/carousel.component';
@@ -31,7 +31,7 @@ export class ProductsComponent {
 
 
 
-  constructor(private productService: ProductService, private cartService: CartService) {
+  constructor(private productService: ProductService, private cartService: CartService, private router: Router) {
     this.isAdmin = localStorage.getItem("isAdmin")
   }
 
@@ -48,6 +48,10 @@ export class ProductsComponent {
   }
 
   handleAddToCart(productId: any) {
+
+    if (localStorage.getItem("user_token") == null) {
+      this.router.navigate(['/login']);
+    }
 
     this.cartService.addCartItem(productId, 1)
   }

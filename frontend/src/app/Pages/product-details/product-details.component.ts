@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { poducList } from '../..//products-list';
 import { NavBarComponent } from '../../Components/nav-bar/nav-bar.component';
 import { NgIf } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DiscountPipe } from '../../pipes/discount.pipe';
 import { CarouselComponent } from '../../Components/carousel/carousel.component';
 import { FooterComponent } from '../../Components/footer/footer.component';
@@ -31,7 +31,7 @@ export class ProductDetailsComponent {
   defaultImageUrl: string = "../../../assets/images/defaultProduct.png"
 
 
-  constructor(private productService: ProductService, private cartService: CartService) {
+  constructor(private productService: ProductService, private cartService: CartService, private router: Router) {
     this.isAdmin = localStorage.getItem("isAdmin")
   }
 
@@ -62,6 +62,9 @@ export class ProductDetailsComponent {
   }
 
   handleAddToCart(productId: any) {
+    if (localStorage.getItem("user_token") == null) {
+      this.router.navigate(['/login']);
+    }
     this.cartService.addCartItem(productId, 1)
   }
 
